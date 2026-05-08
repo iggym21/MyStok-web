@@ -7,6 +7,32 @@ from backend.models import Stock, DailyPrice
 
 logger = logging.getLogger(__name__)
 
+INDUSTRY_TO_SECTOR: dict[str, str] = {
+    "technology": "Technology",
+    "social media": "Technology",
+    "gaming": "Technology",
+    "entertainment": "Communication Services",
+    "music": "Communication Services",
+    "finance": "Financial Services",
+    "financial services": "Financial Services",
+    "cryptocurrency": "Financial Services",
+    "healthcare": "Healthcare",
+    "automotive": "Consumer Cyclical",
+    "retail": "Consumer Cyclical",
+    "e-commerce": "Consumer Cyclical",
+    "apparel": "Consumer Cyclical",
+    "footwear": "Consumer Cyclical",
+    "luxury goods": "Consumer Cyclical",
+    "hospitality": "Consumer Cyclical",
+    "fitness": "Consumer Cyclical",
+    "consumer goods": "Consumer Defensive",
+    "food": "Consumer Defensive",
+    "food & beverage": "Consumer Defensive",
+    "logistics": "Industrials",
+    "manufacturing": "Industrials",
+    "aviation": "Industrials",
+}
+
 CSV_COLUMN_MAP = {
     "Date": "date",
     "Open": "open",
@@ -36,6 +62,13 @@ def parse_csv(csv_path: str) -> tuple[dict, list[dict]]:
     df = pd.read_csv(csv_path, parse_dates=["Date"])
     df.rename(columns=CSV_COLUMN_MAP, inplace=True)
 
+    # Normalize date to date-only (strips timezone and time components)
+    df["date"] = pd.to_datetime(df["date"], utc=True).dt.date
+
+    # Drop duplicate (ticker, date) rows — dataset occasionally has multiple
+    # entries per trading day; keep the last one for each pair
+    df = df.drop_duplicates(subset=["ticker", "date"], keep="last")
+
     stocks: dict[str, dict] = {}
     for _, row in df.drop_duplicates("ticker").iterrows():
         stocks[row["ticker"]] = {
@@ -43,14 +76,14 @@ def parse_csv(csv_path: str) -> tuple[dict, list[dict]]:
             "company_name": _none_if_nan(row.get("company_name")),
             "industry": _none_if_nan(row.get("industry")),
             "country": _none_if_nan(row.get("country")),
-            "sector": None,
+            "sector": INDUSTRY_TO_SECTOR.get((row.get("industry") or "").lower()),
         }
 
     prices = []
     for _, row in df.iterrows():
         prices.append({
             "ticker": row["ticker"],
-            "date": row["date"].date() if hasattr(row["date"], "date") else row["date"],
+            "date": row["date"],
             "open": _none_if_nan(row.get("open")),
             "high": _none_if_nan(row.get("high")),
             "low": _none_if_nan(row.get("low")),
