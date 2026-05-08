@@ -30,7 +30,7 @@ class RecommendResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     status: str
-    last_refresh: datetime | None
+    last_refresh: datetime | None = None
 
 
 class StockDetail(BaseModel):

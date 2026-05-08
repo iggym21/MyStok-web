@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from sqlalchemy import String, Float, Integer, Date, DateTime, ForeignKey
+from sqlalchemy import String, Float, Integer, BigInteger, Date, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from backend.database import Base
 
@@ -31,7 +31,7 @@ class Fundamentals(Base):
     ticker: Mapped[str] = mapped_column(String, ForeignKey("stocks.ticker"), primary_key=True)
     pe_ratio: Mapped[float | None] = mapped_column(Float)
     dividend_yield: Mapped[float | None] = mapped_column(Float)
-    market_cap: Mapped[int | None] = mapped_column(Integer)
+    market_cap: Mapped[int | None] = mapped_column(BigInteger)
     week52_high: Mapped[float | None] = mapped_column(Float)
     week52_low: Mapped[float | None] = mapped_column(Float)
     last_updated: Mapped[datetime | None] = mapped_column(DateTime)
