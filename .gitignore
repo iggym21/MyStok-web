@@ -1,6 +1,10 @@
 .superpowers/
 frontend/node_modules/
+frontend/dist/
 __pycache__/
 *.pyc
 .env
 mystok.db
+data/
+.DS_Store
+**/.DS_Store
