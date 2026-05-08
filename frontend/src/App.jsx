@@ -1,5 +1,5 @@
-function App() {
-  return <div>MyStok</div>
-}
+import Layout from './components/Layout.jsx'
 
-export default App
+export default function App() {
+  return <Layout><p className="text-white">Hello</p></Layout>
+}
