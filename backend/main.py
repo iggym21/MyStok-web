@@ -2,6 +2,7 @@ import logging
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from backend.database import engine, SessionLocal
 from backend.models import Base
 from backend.importer import import_stocks
@@ -29,6 +30,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="MyStok API", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(health.router)
 app.include_router(sectors.router)
