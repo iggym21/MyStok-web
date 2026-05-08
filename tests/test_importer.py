@@ -6,7 +6,7 @@ from backend.importer import parse_csv, import_stocks
 def test_parse_csv_returns_tickers_and_prices(tmp_path):
     csv = tmp_path / "stocks.csv"
     csv.write_text(
-        "Date,Open,High,Low,Close,Volume,Name,ticker,Industry,Country\n"
+        "Date,Open,High,Low,Close,Volume,Brand_Name,Ticker,Industry_Tag,Country\n"
         "2023-01-01,100,110,90,105,1000000,Apple Inc,AAPL,Software,USA\n"
         "2023-01-02,105,115,100,110,1200000,Apple Inc,AAPL,Software,USA\n"
     )
@@ -19,7 +19,7 @@ def test_parse_csv_returns_tickers_and_prices(tmp_path):
 def test_parse_csv_deduplicates_stocks(tmp_path):
     csv = tmp_path / "stocks.csv"
     csv.write_text(
-        "Date,Open,High,Low,Close,Volume,Name,ticker,Industry,Country\n"
+        "Date,Open,High,Low,Close,Volume,Brand_Name,Ticker,Industry_Tag,Country\n"
         "2023-01-01,100,110,90,105,1000000,Apple Inc,AAPL,Software,USA\n"
         "2023-01-02,105,115,100,110,1200000,Apple Inc,AAPL,Software,USA\n"
     )

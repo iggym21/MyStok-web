@@ -14,9 +14,9 @@ CSV_COLUMN_MAP = {
     "Low": "low",
     "Close": "close",
     "Volume": "volume",
-    "Name": "company_name",
-    "ticker": "ticker",
-    "Industry": "industry",
+    "Brand_Name": "company_name",
+    "Ticker": "ticker",
+    "Industry_Tag": "industry",
     "Country": "country",
 }
 
